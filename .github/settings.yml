@@ -1,0 +1,12 @@
+repository:
+  private: true
+  
+labels:
+  - name: auth
+    color: 0E8A16
+
+  - name: aws
+    color: 0E8A16
+    
+  - name: backup
+    color: 0E8A16
