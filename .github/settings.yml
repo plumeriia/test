@@ -7,6 +7,4 @@ labels:
 
   - name: aws
     color: 0E8A16
-    
-  - name: backup
-    color: 0E8A16
+
