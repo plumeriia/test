@@ -1,5 +1,9 @@
-name: Context testing
-on: push
+name: gitleaks
+on:
+  pull_request:
+    types:
+      - opened
+  workflow_dispatch:
 
 jobs:
   dump:
