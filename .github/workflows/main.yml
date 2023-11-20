@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: two
-        run: echo " in ${{github.ref}} on ${{github.sha}}"
+        run: echo " in ${{github.base_ref.pull_request}}"
 
