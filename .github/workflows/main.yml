@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: two
-        run: echo " in ${{github.base_ref.pull_request}}"
+        run: echo "Pull Request URL: https://github.com/${{ github.repository }}/pull/${{ github.sha }}"
 
