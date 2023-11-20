@@ -11,5 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: two
-        run: echo "Pull Request URL: https://github.com/${{ github.repository }}/pull/<pr_number>"
+        run: echo "1 ${{ github.event.pull_request.number }}"
+
+      - name: three
+        run: echo "2 ${{ github.event.number }}"
 
