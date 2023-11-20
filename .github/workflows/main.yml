@@ -1,17 +1,15 @@
 name: gitleaks
 on:
   push:
+  pull_request:
+    types:
+      - opened
   workflow_dispatch:
 
 jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
-      - name: zero
-        run: echo ${{ job.status }}
-      - name: one
-        run: echo "<https://github.com/${{ github.actor }}|${{ github.actor }}> shared an unencrypted secret"
       - name: two
-        run: echo "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}/{branch}> on <{commit_url}|{commit_sha}>"
-      - name: three
-        run: echo "Linked Repo <{repo_url}|{repo}>"
+        run: echo " in ${{github.ref}} on ${{github.sha}}"
+
