@@ -11,8 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: two
-        run: echo "1 ${{ github.event.pull_request.number }}"
-
-      - name: three
-        run: echo "2 ${{ github.event.number }}"
+        run: echo "${{github.server_url}}/${{github.actor}}"
 
