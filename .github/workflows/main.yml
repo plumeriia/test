@@ -1,15 +1,20 @@
 name: gitleaks
 on:
-  push:
   pull_request:
     types:
       - opened
-  workflow_dispatch:
-
 jobs:
-  dump:
-    runs-on: ubuntu-latest
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latests
     steps:
-      - name: two
-        run: echo "${{github.server_url}}/${{github.repository}}/commit/${{github.sha}}"
-
+      - uses: ravsamhq/notify-slack-action@v2
+        if: always()
+        with:
+          status: ${{ job.status }}
+          notification_title: "on <{repo_url}/commit/${{github.sha}}|tre>"
+          message_format: " on <{repo_url}/commit/${{github.sha}}|{commit_sha}>"
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          notify_when: "failure"
+        env:
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK}}
