@@ -4,9 +4,10 @@ on:
     types:
       - opened
   push:
+  workflow_dispatch:
+
 jobs:
-  scan:
-    name: gitleaks
+  dump:
     runs-on: ubuntu-latest
     steps:
       - name: one
