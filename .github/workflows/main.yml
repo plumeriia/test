@@ -9,14 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo Message Format
-        run: echo 1 - "<{repo_url}/commit/${{github.sha}}|{commit_sha}>"
-      - uses: ravsamhq/notify-slack-action@v2
-        if: always()
-        with:
-          status: ${{ job.status }}
-          notification_title: "on <{repo_url}/commit/${{github.sha}}|tre>"
-          message_format: " on <{repo_url}/commit/${{github.sha}}|{commit_sha}>"
-          footer: "Linked Repo <{repo_url}|{repo}>"
-          notify_when: "failure"
-        env:
-          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK}}
+        run: echo  "${commit_sha}"
