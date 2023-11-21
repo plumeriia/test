@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: two
-        run: echo "${{github.server_url}}/${{github.actor}}"
+        run: echo "${{github.server_url}}/${{github.repository}}/commit/${{github.sha}}"
 
