@@ -3,10 +3,17 @@ on:
   pull_request:
     types:
       - opened
+  push:
 jobs:
   scan:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Message Format
+      - name: one
         run: echo  "${commit_sha}"
+      - name: two
+        run: echo "${{github.server_url}}/${{github.actor}}"
+      - name: three
+        run: echo  "${{commit_sha}}"
+      - name: four
+        run: echo ${{commit_sha}}
