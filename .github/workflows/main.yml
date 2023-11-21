@@ -8,6 +8,8 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
+      - name: Echo Message Format
+        run: echo 1 - "<{repo_url}/commit/${{github.sha}}|{commit_sha}>"
       - uses: ravsamhq/notify-slack-action@v2
         if: always()
         with:
