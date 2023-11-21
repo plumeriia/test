@@ -10,11 +10,7 @@ jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
-      - name: one
-        run: echo  "${commit_sha}"
-      - name: two
-        run: echo "${{github.server_url}}/${{github.actor}}"
+
       - name: three
         run: echo  "${{commit_sha}}"
-      - name: four
-        run: echo ${{commit_sha}}
+
