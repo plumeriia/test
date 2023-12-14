@@ -9,7 +9,7 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{steps.get-details.outputs.job_html}}
+      output1: ${{steps.get-details.outputs.link}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -26,13 +26,13 @@ jobs:
         run: |
           export repo="${{ github.repository }}"
           export workflow_run_id="${{ github.run_id }}"
-          run_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$repo/actions/runs/$workflow_run_id/jobs")
+          run_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$repo/actions/runs/$workflow_run_id/artifacts")
           echo "$run_details"
-          job_html_url=$(echo "$run_details" | jq -r '.jobs[0].html_url')
-          echo "$job_html_url"
-          summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$job_html_url/summary_raw")
+          url=$(echo "$run_details" | jq -r '.artifacts[0].archive_download_url')
+          echo "$url"
+          summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$url/summary_raw")
           echo "$summary_raw"
-          echo "::set-output name=job_html::$job_html_url"  
+          echo "::set-output name=link::$url"  
 
   process-results:
     name: Process Results
@@ -44,5 +44,6 @@ jobs:
            echo ${{needs.gitleaks.outputs.output1}}
            job_html_url=${{ needs.gitleaks.outputs.output1 }}
            echo "Job HTML URL: $job_html_url"
-           summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$job_html_url/summary_raw")
+           summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$job_html_url")
+           ls -a
            echo "$summary_raw"
