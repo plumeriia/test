@@ -1,0 +1,10 @@
+title = "Gitleaks"
+
+[extend]
+useDefault = false
+
+[[rules]]
+id = "*.key"
+description = "all .key files"
+regex = '''.*'''
+path = '''(.*?)(\.key$)'''
