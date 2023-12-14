@@ -1,0 +1,32 @@
+name: gitleaks
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+
+jobs:
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        
+      - uses: gitleaks/gitleaks-action@v2
+        id: gitleaks
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - id: exp
+        uses: pl-strflt/job-summary-url-action@v1
+      
+      - name: Get job_html_url
+        run: |
+           job_html_url="${{ steps.exp.outputs.job_summary_url }}"
+           echo "Job HTML URL: $job_html_url"
+           summary_content=$(curl -s "$job_html_url")
+
+           echo "Summary Content:"
+           echo "$summary_content"
