@@ -33,5 +33,6 @@ jobs:
            echo "$run_details"
            url=$(echo "$run_details" | jq -r '.artifacts[0].archive_download_url')
            echo "$url"
+           pwd
            ls -a
            
