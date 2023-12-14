@@ -8,8 +8,6 @@ jobs:
   gitleaks:
     name: gitleaks
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{steps.get-details.outputs.link}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -19,14 +17,7 @@ jobs:
         id: gitleaks
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get Workflow Run ID and Repository
-        id: get-details
-        run: |
-          summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$url/summary_raw")
-          echo "$summary_raw"
-          echo "::set-output name=link::$url"  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
   process-results:
     name: Process Results
@@ -41,7 +32,5 @@ jobs:
            echo "$run_details"
            url=$(echo "$run_details" | jq -r '.artifacts[0].archive_download_url')
            echo "$url"
-           echo ${{needs.gitleaks.outputs.output1}}
-           job_html_url=${{ needs.gitleaks.outputs.output1 }}
            ls -a
            
