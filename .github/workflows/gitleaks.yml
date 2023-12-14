@@ -8,25 +8,41 @@ jobs:
   gitleaks:
     name: gitleaks
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{steps.get-details.outputs.job_html}}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-        
+
       - uses: gitleaks/gitleaks-action@v2
         id: gitleaks
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - id: exp
-        uses: pl-strflt/job-summary-url-action@v1
-      
+
+      - name: Get Workflow Run ID and Repository
+        id: get-details
+        run: |
+          export repo="${{ github.repository }}"
+          export workflow_run_id="${{ github.run_id }}"
+          run_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$repo/actions/runs/$workflow_run_id/jobs")
+          echo "$run_details"
+          job_html_url=$(echo "$run_details" | jq -r '.jobs[0].html_url')
+          echo "$job_html_url"
+          summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$job_html_url/summary_raw")
+          echo "$summary_raw"
+          echo "::set-output name=job_html::$job_html_url"  
+
+  process-results:
+    name: Process Results
+    needs: gitleaks
+    runs-on: ubuntu-latest
+    steps:
       - name: Get job_html_url
         run: |
-           job_html_url="${{ steps.exp.outputs.job_summary_url }}"
+           echo ${{needs.gitleaks.outputs.output1}}
+           job_html_url=${{ needs.gitleaks.outputs.output1 }}
            echo "Job HTML URL: $job_html_url"
-           summary_content=$(curl -s "$job_html_url")
-
-           echo "Summary Content:"
-           echo "$summary_content"
+           summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$job_html_url/summary_raw")
+           echo "$summary_raw"
