@@ -24,12 +24,6 @@ jobs:
       - name: Get Workflow Run ID and Repository
         id: get-details
         run: |
-          export repo="${{ github.repository }}"
-          export workflow_run_id="${{ github.run_id }}"
-          run_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$repo/actions/runs/$workflow_run_id/artifacts")
-          echo "$run_details"
-          url=$(echo "$run_details" | jq -r '.artifacts[0].archive_download_url')
-          echo "$url"
           summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$url/summary_raw")
           echo "$summary_raw"
           echo "::set-output name=link::$url"  
@@ -41,9 +35,13 @@ jobs:
     steps:
       - name: Get job_html_url
         run: |
+           export repo="${{ github.repository }}"
+           export workflow_run_id="${{ github.run_id }}"
+           run_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$repo/actions/runs/$workflow_run_id/artifacts")
+           echo "$run_details"
+           url=$(echo "$run_details" | jq -r '.artifacts[0].archive_download_url')
+           echo "$url"
            echo ${{needs.gitleaks.outputs.output1}}
            job_html_url=${{ needs.gitleaks.outputs.output1 }}
-           echo "Job HTML URL: $job_html_url"
-           summary_raw=$(curl -s -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" "$job_html_url")
            ls -a
-           echo "$summary_raw"
+           
